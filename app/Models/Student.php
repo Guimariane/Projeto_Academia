@@ -20,16 +20,16 @@ class Student extends Model
         'date_birth',
         'cpf',
         'contact',
-        'cep',
+        'user_id',
+        'city',
+        'neighborhood',
+        'number',
         'street',
         'state',
-        'neighborhood',
-        'city',
-        'number'];
+        'cep'
+    ];
 
-    protected $hidden = ['created_at','updated_at'];
-
-    public function user(){
-        return $this->belongsTo(User::class, 'id', 'id');
-    }
+    // public function user(){
+    //     return $this->belongsTo(User::class);
+    // }
 }

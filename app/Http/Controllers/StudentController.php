@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Student;
 use App\Traits\HttpResponses;
+use Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 class StudentController extends Controller
@@ -14,94 +15,112 @@ class StudentController extends Controller
 
 
     // Função para puxar a lista de estudantes
-    public function index() {
-        try{
+    public function index(Request $request)
+    {
+        $user_id = $request->user();
 
-            $students = Student::findAll();
+        if (!$user_id) {
+            return $this->response('Usuário não autenticado', Response::HTTP_UNAUTHORIZED);
+        }
 
-            return $students;
+        $students = $user_id->students()->orderBy('name')->get();
 
-        } catch (\Exception $exception){
-            return $this->error($exception->getMessage(), Response::HTTP_BAD_REQUEST);
-        }}
-
+        return $students;
+    }
 
     // Função para cadastrar um estudante:
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         try {
             $data = $request->all();
 
             $request->validate([
-                'name' => 'string|required|max: 255',
-                'email'=> 'string|required|unique:students|max: 255',
-                'date_birth'=> 'required',
-                'cpf'=> 'string|required|unique:students',
-                'contact'=> 'string|required',
-                'cep'=> 'string|max: 20',
-                'street'=> 'string',
+                'name' => 'string|required',
+                'email' => 'string|required|unique:students',
+                'date_birth' => 'required',
+                'cpf' => 'string|required|max:14|unique:students',
+                'cep' => 'string',
+                'street' => 'string',
                 'state' => 'string',
-                'neighborhood' => 'string',
+                'netghborhood' => 'string',
                 'city' => 'string',
-                'number' => 'string'
+                'number' => 'string',
+                'contact' => 'string|required|max:20'
             ]);
 
-            $students = Student::create($data);
+            $user_id = $request->user()->id;
 
-            return $students;
-
-        } catch (\Exception $exception){
-
-            return $this->error($exception->getMessage(), Response::HTTP_BAD_REQUEST);
+            if (!$user_id) {
+                return response()->json(['message' => 'Usuario nao autenticado'], Response::HTTP_BAD_REQUEST);
             }
+
+            $student = Student::create([
+                'user_id' => $user_id,
+                ...$data
+            ]);
+
+            return $student;
+        } catch (Exception $exception) {
+            return $this->error($exception->getMessage(), Response::HTTP_BAD_REQUEST);
         }
+    }
+
 
     // Função para atualizar algum dado de um estudante:
-    public function update($id, Request $request){
-        try{
-            $data = $request->all();
-
+    public function update($id, Request $request)
+    {
+        try {
             $request->validate([
-                'name' => 'string|max: 255',
-                'email'=> 'string|max: 255',
-                'date_birth'=> 'date format: yyyy-mm-dd',
-                'cpf'=> 'string|unique:students|',
-                'contact'=> 'string',
-                'cep'=> 'string|max: 20',
-                'street'=> 'string',
+                'name' => 'string|max:255',
+                'email' => 'string|unique:students|max:255',
+                'date_birth' => 'string',
+                'cpf' => 'string|unique:students',
+                'cep' => 'string',
+                'street' => 'string',
                 'state' => 'string',
-                'neighborhood' => 'string',
+                'netghborhood' => 'string',
                 'city' => 'string',
-                'number' => 'string'
+                'number' => 'string',
+                'contact' => 'string|max:20'
             ]);
 
             $students = Student::find($id);
 
-            if(!$students) return $this->error("Estudante não encontrado. Tente novamente", Response::HTTP_NOT_FOUND);
+            if (!$students) return $this->error("Estudante não encontrado. Tente novamente", Response::HTTP_NOT_FOUND);
 
-            $students->update($data);
+            if ($students->user_id !== auth()->user()->id) {
+                return $this->response('Você não tem permissão para atualizar este estudante', Response::HTTP_FORBIDDEN);
+            }
+
+            $students->update($request->all());
 
             return $students;
-
         } catch (\Exception $exception) {
 
             return $this->error($exception->getMessage(), Response::HTTP_BAD_REQUEST);
         }
-
     }
 
     // Função para deletar (soft) um estudante:
-    public function destroy($id){
+    public function destroy($id)
+    {
+
         $students = Student::find($id);
 
-        if(!$students) return $this->error("Informação não encontrada", Response::HTTP_NOT_FOUND);
+        if (!$students) return $this->error("Informação não encontrada", Response::HTTP_NOT_FOUND);
+
+        if ($students->user_id !== auth()->user()->id) {
+            return $this->response('Você não tem permissão para excluir este estudante', Response::HTTP_FORBIDDEN);
+        }
 
         $students->delete();
 
-        return $this->response("Informação excluída com sucesso",Response::HTTP_NO_CONTENT);
-        }
+        return $this->response("Informação excluída com sucesso", Response::HTTP_NO_CONTENT);
+    }
 
     // Função para puxar somente um estudante em questão
-    public function show(Request $request) {
+    public function show(Request $request)
+    {
         $search = $request->input('id');
 
         $students = Student::query()
@@ -109,11 +128,11 @@ class StudentController extends Controller
             ->whereHas('students', function ($query) use ($search) {
                 $query
                     ->select()
-                    ->where('id' == $search);
+                    ->where('id', $search);
             })
             ->get();
 
-        if(!$students) return $this->error("Estudante não encontrado. Tente novamente", Response::HTTP_NOT_FOUND);
+        if (!$students) return $this->error("Estudante não encontrado. Tente novamente", Response::HTTP_NOT_FOUND);
 
         return $students;
     }
