@@ -12,21 +12,17 @@ class StudentController extends Controller
 
     use HttpResponses;
 
-    public function index (Request $request) {
-        try {
-            $filters = $request->query();
+    public function index() {
+        try{
 
-            $students = Student::query()
-                ->select(
-                    'name',
-                    'cpf',
-                    'email'
-                );
+            $students = Student::findAll();
 
+                return $students;
 
-        }
+        } catch (\Exception $exception){
+            return $this->error($exception->getMessage(), Response::HTTP_BAD_REQUEST);
+        }}
 
-    }
     public function store(Request $request) {
         try {
             $data = $request->all();
@@ -47,12 +43,8 @@ class StudentController extends Controller
 
             $students = Student::create($data);
 
-            $students;
-
-            return $this->response('Cadastro criado com sucesso', 201);
-
+            return $students;
         } catch (\Exception $exception){
-            return $this->error($exception->getMessage(), Response::HTTP_BAD_REQUEST);
-        }
-    }
+                return $this->error($exception->getMessage(), Response::HTTP_BAD_REQUEST);
+            }}
 }
