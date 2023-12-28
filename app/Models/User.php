@@ -45,4 +45,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function plans(){
+        return $this->belongsTo(Plan::class, 'plan_id', 'id');
+    }
 }
