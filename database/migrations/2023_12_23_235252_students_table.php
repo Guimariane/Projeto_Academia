@@ -11,23 +11,27 @@ return new class extends Migration
 
         Schema::create('students', function(Blueprint $table) {
             $table->id();
+            $table->created_at();
+            $table->updated_at();
             $table->string('name', 255);
             $table->string('email')->unique();
             $table->date('date_birth');
             $table->string('cpf', 14)->unique();
             $table->string('contact', 20);
-            $table->foreign('user_id')->references('id')->on('users');
             $table->string('city', 50);
             $table->string('neighborhood', 50);
             $table->string('number', 30);
             $table->string('street', 30);
             $table->string('state', 2);
             $table->string('cep', 20);
+
+            $table->foreign('user_id')->references('id')->on('users');
+
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('students');
     }
 };
