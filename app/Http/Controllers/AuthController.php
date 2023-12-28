@@ -25,6 +25,8 @@ class AuthController extends Controller
 
            $authenticated =  Auth::attempt($data);
 
+           $user = Auth::user();
+
            if(!$authenticated) {
                 return $this->error('Login ou senha incorretos', Response::HTTP_UNAUTHORIZED);
            }
@@ -33,8 +35,8 @@ class AuthController extends Controller
 
            $token = $request->user()->createToken('simple');
 
-           return $this->response('Login autorizado', 200, [
-            'token' => $token->plainTextToken
+           return $this->response('Login autorizado', Response::HTTP_OK, ['nome'=>$user->name,
+            'token' => $token
            ]);
 
 
