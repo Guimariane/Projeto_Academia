@@ -23,7 +23,7 @@ class UserController extends Controller
                 'date_birth'=>'string|required',
                 'cpf'=> 'string|required|unique:users|max:14',
                 'password'=>'string|required|min:8|max:32',
-                'plan_id' => 'required'
+                'plan_id' => 'int|required'
             ]);
 
             $user = User::create($data);
