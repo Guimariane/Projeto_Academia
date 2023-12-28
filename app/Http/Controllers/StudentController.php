@@ -47,4 +47,12 @@ class StudentController extends Controller
         } catch (\Exception $exception){
                 return $this->error($exception->getMessage(), Response::HTTP_BAD_REQUEST);
             }}
+
+    public function update(){
+            return "ok"
+        }
+
+    public function destroy(){
+            return "ok"
+        }
 }
