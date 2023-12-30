@@ -12,7 +12,8 @@ class Exercise extends Model
     protected $table = 'exercises';
 
     protected $fillable = [
-        'description'
+        'description',
+        'user_id'
     ];
 
     public function user(){
