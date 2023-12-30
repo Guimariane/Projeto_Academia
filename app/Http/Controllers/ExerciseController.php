@@ -21,12 +21,16 @@ class ExerciseController extends Controller
                 return response()->json(['message' => 'Usuario nao autenticado'], Response::HTTP_BAD_REQUEST);
             }
 
+            $search = $request->input('description');
+
+            $data_exercises = Exercise::query()->where('description', $search)->count();
+
+            if($data_exercises !== 0) return $this->error("Você já cadastrou esse exercício", Response::HTTP_CONFLICT);
+
             $exercises = Exercise::create([
                 'user_id' => $user_id,
                 ...$data
             ]);
-
-            $exercises = Exercise::create($request->all());
 
             return $exercises;
 
@@ -44,7 +48,7 @@ class ExerciseController extends Controller
             return $this->response('Usuário não autenticado', Response::HTTP_UNAUTHORIZED);
         }
 
-        $exercises = $user_id->exercises()->orderBy('name')->get();
+        $exercises = $user_id->exercises()->get();
 
         return $exercises;
     }
