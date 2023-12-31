@@ -104,7 +104,6 @@ class StudentController extends Controller
     // Função para deletar (soft) um estudante:
     public function destroy($id)
     {
-
         $students = Student::find($id);
 
         if (!$students) return $this->error("Informação não encontrada", Response::HTTP_NOT_FOUND);
