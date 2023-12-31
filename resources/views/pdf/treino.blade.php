@@ -31,7 +31,7 @@
 
     <h3>Rotina de Treino</h3>
 
-    <thead>
+    {{-- <thead>
         <tr>
             <th>Dia</th>
             <th>Exercício</th>
@@ -39,7 +39,7 @@
             <th>Peso</th>
             <th>Tempo de Pausa</th>
         </tr>
-    </thead>
+    </thead> --}}
 
 </body>
 </html>
