@@ -21,10 +21,10 @@ class Workout extends Model
     ];
 
     public function students(){
-        return $this->belongsTo(Student::class, 'student_id', 'id');
+        return $this->belongsTo(Student::class, 'id', 'id');
     }
 
     public function exercises(){
-        return $this->belongsTo(Exercise::class, 'exercise_id', 'id');
+        return $this->belongsTo(Exercise::class, 'id', 'id');
     }
 }
