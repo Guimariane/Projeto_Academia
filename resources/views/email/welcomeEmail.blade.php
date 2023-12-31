@@ -20,12 +20,12 @@
     </style>
 </head>
 <body>
-    <h1>Olá, {{$user->name}}!</h1>
+    <h1>Olá, {{$name}}!</h1>
 
     <p>Que bom que se juntou a nós da FitTech!</p>
 
-    <p>Você se cadastrou no {{$plan->description}} e, com isso, gostaria de lembrar que você tem um limite de
-    {{$plan->limit}}!</p>
+    {{-- <p>Você se cadastrou no {{$type_plan}} e, com isso, gostaria de lembrar que você tem um limite de
+    {{$limit_plan}}!</p> --}}
 
     <p>Caso tenha mais alguma dúvida, por favor não hesite em nos contatar! Estamos aqui para te ajudar!</p>
 
