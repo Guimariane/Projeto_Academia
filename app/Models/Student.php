@@ -32,15 +32,9 @@ class Student extends Model
     public function user(){
         return $this->belongsTo(User::class, 'id', 'id');
     }
-<<<<<<< Updated upstream
-
-=======
-<<<<<<< Updated upstream
-=======
 
     public function workouts(){
         return $this->hasMany(Workout::class, 'student_id', 'id');
     }
->>>>>>> Stashed changes
->>>>>>> Stashed changes
+
 }
