@@ -104,41 +104,41 @@ class WorkoutController extends Controller
 
         $students = $user->students()->findOrFail($id);
 
-        $student_name = $students->name;
+        // $student_name = $students->name;
 
-        $workouts = Workout::where('student_id', $id)->get();
+        // $workouts = Workout::where('student_id', $id)->get();
 
-        $response = [
-            'student_id' => $id,
-            'student_name' => $student_name,
-            'workouts' => [
-                'SEGUNDA' => [],
-                'TERCA' => [],
-                'QUARTA' => [],
-                'QUINTA' => [],
-                'SEXTA' => [],
-                'SABADO' => [],
-                'DOMINGO' => [],
-            ],
-        ];
+        // $response = [
+        //     'student_id' => $id,
+        //     'student_name' => $student_name,
+        //     'workouts' => [
+        //         'SEGUNDA' => [],
+        //         'TERCA' => [],
+        //         'QUARTA' => [],
+        //         'QUINTA' => [],
+        //         'SEXTA' => [],
+        //         'SABADO' => [],
+        //         'DOMINGO' => [],
+        //     ],
+        // ];
 
-        foreach ($workouts as $workout) {
-            $day = strtoupper($workout->day);
-            $response['workouts'][$day][] = [
-                'description' => $workout->exercises->description,
-                'repetitions' => $workout->repetitions,
-                'weight' => $workout->weight,
-                'break_time' => $workout->break_time,
-                'day' => $workout->day,
-                'observations' => $workout->observations,
-                'time' => $workout->time,
-            ];
-        }
+        // foreach ($workouts as $workout) {
+        //     $day = strtoupper($workout->day);
+        //     $response['workouts'][$day][] = [
+        //         'description' => $workout->exercises->description,
+        //         'repetitions' => $workout->repetitions,
+        //         'weight' => $workout->weight,
+        //         'break_time' => $workout->break_time,
+        //         'day' => $workout->day,
+        //         'observations' => $workout->observations,
+        //         'time' => $workout->time,
+        //     ];
+        // }
 
         $pdf = Pdf::loadView('pdf.treino', [
             'students' => $students,
-            'workouts' => $workouts,
-            'response' => $response
+            // 'workouts' => $workouts,
+            // 'response' => $response
         ]);
 
         return $pdf->stream('treino.pdf');
