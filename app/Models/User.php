@@ -20,7 +20,10 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'date_birth',
+        'cpf',
         'password',
+        'plan_id'
     ];
 
     /**
@@ -42,4 +45,20 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function plans(){
+        return $this->belongsTo(Plan::class);
+    }
+
+    public function students(){
+        return $this->hasMany(Student::class, 'user_id', 'id');
+    }
+
+    public function exercises(){
+        return $this->hasMany(Exercise::class, 'user_id', 'id');
+    }
+
+    public function workouts(){
+        return $this->hasMany(Workout::class);
+    }
 }
