@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Exercise;
+use App\Models\Workout;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
