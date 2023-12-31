@@ -104,6 +104,7 @@ class StudentController extends Controller
     // Função para deletar (soft) um estudante:
     public function destroy($id)
     {
+
         $students = Student::find($id);
 
         if (!$students) return $this->error("Informação não encontrada", Response::HTTP_NOT_FOUND);
@@ -118,21 +119,12 @@ class StudentController extends Controller
     }
 
     // Função para puxar somente um estudante em questão
-    public function show(Request $request)
+    public function show($id)
     {
-        $search = $request->input('id');
+        $search = Student::find($id);
 
-        $students = Student::query()
-            ->with('students')
-            ->whereHas('students', function ($query) use ($search) {
-                $query
-                    ->select()
-                    ->where('id', $search);
-            })
-            ->get();
+        if (!$search) return $this->error("Estudante não encontrado. Tente novamente", Response::HTTP_NOT_FOUND);
 
-        if (!$students) return $this->error("Estudante não encontrado. Tente novamente", Response::HTTP_NOT_FOUND);
-
-        return $students;
+        return $search;
     }
 }
