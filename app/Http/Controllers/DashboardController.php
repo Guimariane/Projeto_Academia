@@ -26,10 +26,10 @@ class DashboardController extends Controller
             $count_plan = $plan->limit;
 
             return response()->json([
-                'Estudantes cadastrados' => $registered_students,
-                'Exercícios cadastrados' => $registered_exercises,
-                'Plano do Usuário' => $description_plan,
-                'Cadastros Restantes' => $count_plan-$registered_students
+                'registered_students' => $registered_students,
+                'registered_exercises' => $registered_exercises,
+                'description_plan' => $description_plan,
+                'remaining_estudants' => $count_plan-$registered_students
                 ]);
 
         } catch (\Exception $exception) {
