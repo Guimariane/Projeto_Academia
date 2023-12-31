@@ -32,8 +32,43 @@ Abaixo encontra-se um esquema desenvolvido via PostgreSQL com as tabelas que for
 | students | id | workouts | student_id |
 
 # Como configurar o projeto corretamente
+Para começar a rodar o Laravel no seu computador é necessário ter o composer instalado na sua máquina. Após isso, executar:
+```
+composer install
+```
+Para criar um novo projeto para importar esse repósito use:
+```
+composer create-project laravel/laravel api_nome_da_sua_api
+```
+Importe esse repositório
+[Aqui](https://github.com/Guimariane/Projeto_Academia)
 
+Para configurar o seu banco de dados dentro do código, utilizar:
+```
+DB_CONNECTION=pgsql
+DB_HOST=
+DB_PORT=
+DB_DATABASE=
+DB_USERNAME=
+DB_PASSWORD=
+```
+Para popular o banco de dados com a seed dos planos, usar:
+```
+php artisan db:seed PopulatePlans
+```
 
+Para rodar o servidor e conectar o banco de dados com o código, utilizar:
+```
+php artisan serve
+```
+Para configurar o envio de email do seu computador, entrar em https://mailtrap.io/ e colocar as seguintes requições dentro do arquivo .env
+```
+MAIL_MAILER=
+MAIL_HOST=
+MAIL_PORT=
+MAIL_USERNAME=
+MAIL_PASSWORD=
+```
 # Detalhamento da API
 
 ## Rotas
@@ -96,6 +131,7 @@ POST - api/users
 ### Imagens das requisições
 ![Imagem 1 - User Criado com Sucesso](https://github.com/Guimariane/Projeto_Academia/assets/47523514/375cc48a-768d-494d-80a6-5ede0af5f2ef)
 ![Imagem 2 - Bad Request](https://github.com/Guimariane/Projeto_Academia/assets/47523514/e646dc52-c8d2-4945-aead-2050c9fd5665)
+![Imagem 26 - Email](https://github.com/Guimariane/Projeto_Academia/assets/47523514/ced20ebf-c15b-461f-b44c-44b3d14bd4b8)
 
 
 ## S02 - Login
@@ -382,6 +418,96 @@ UPDATE - api/students/{id}
 
 
 ## S11 - Cadastro de Treinos
+```
+POST - api/workouts
+```
+
+| Parâmetro | Tipo | Descrição |
+| --------- | -----| --------- |
+| id | int | **Incremental**. Refere-se ao id de cada exercício cadastrado dentro da API |
+| student_id | int | Id do estudante cadastrado para o treino |
+| exercise_id | int | Id do exercício cadastrado para o treino |
+| repetitions | int | Número de Repetições da série |
+| weight | float | Peso usado na série |
+| break_time | int | Tempo de pausa entre as séries |
+| day | enum | Dia do treino |
+| observations | string | Texto longo caso tenha alguma observação para o treino do estudante |
+| time | int | Vezes para realizar o exercício |
+
+### Exemplo de Requisição dentro da API:
+```
+{
+  "student_id": 3,
+  "exercise_id": 16,
+  "repetitions": 4,
+  "weight": 5.5,
+  "break_time": 60,
+  "day": "QUARTA",
+  "observations": "-",
+  "time": 2
+}
+```
+
+### Respostas que podem ser encontradas nessa requisição
+
+| Número do Erro | Response | Descrição |
+| -------------- | -------- | --------- |
+|200| OK | Sucesso ao atualizar o estudante |
+
+### Imagens das requisições
+![Imagem 22 - OK](https://github.com/Guimariane/Projeto_Academia/assets/47523514/cbdbe6cc-0411-4fde-bb34-ac06f5e5430f)
+
+## S12 - Lista de treinos de estudante
+```
+GET - api/workouts
+```
+
+| Parâmetro | Tipo | Descrição |
+| --------- | -----| --------- |
+| student_id | int | Refere-se ao id de cada estudante cadastrado dentro da API |
+| student_name | string | Nome do Estudante |
+| workouts | obj | Cadastro do treino para o dia da semana |
+
+### Respostas que podem ser encontradas nessa requisição
+
+| Número do Erro | Response | Descrição |
+| -------------- | -------- | --------- |
+|200| OK | Lista de treinos da semana para o estudante em questão |
+
+### Imagens das requisições
+![Imagem 27 - Find Treino](https://github.com/Guimariane/Projeto_Academia/assets/47523514/c581cc99-d493-4b05-90b2-31f0813c3439)
 
 
+## S13 - Lista de um estudante
+```
+GET - api/students/{id}
+```
+--> Necessário inputar o id de algum estudante para chamar essa requisição dentro da API
 
+### Respostas que podem ser encontradas nessa requisição
+
+| Número do Erro | Response | Descrição |
+| -------------- | -------- | --------- |
+| 200 | OK | Lista de treinos da semana para o estudante em questão |
+| 404 | NOT FOUND | Estudante em questão não foi encontrado |
+
+### Imagens das requisições
+![Imagem 23 - OK](https://github.com/Guimariane/Projeto_Academia/assets/47523514/969b7c7e-d939-45ad-b210-ef45b579c678)
+![Imagem 24 - Not Found](https://github.com/Guimariane/Projeto_Academia/assets/47523514/ad6080f4-e90e-4f63-9e92-9e2bfd3e9e7e)
+
+
+### S14 - Exportação de PDF
+```
+GET - api/students/export/{id}
+```
+--> Necessário inputar o id de algum estudante para chamar essa requisição dentro da API
+
+### Respostas que podem ser encontradas nessa requisição
+
+| Número do Erro | Response | Descrição |
+| -------------- | -------- | --------- |
+| 200 | OK | O PDF exportado com sucesso |
+
+
+### Imagens das requisições
+![Imagem 25 - PDF](https://github.com/Guimariane/Projeto_Academia/assets/47523514/1986f228-f482-42b2-b6c1-14c71f7e67fe)
