@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\SendWelcomeEmail;
+use App\Models\Plan;
 use App\Models\User;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
