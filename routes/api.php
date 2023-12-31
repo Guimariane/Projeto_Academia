@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WorkoutController;
 use Illuminate\Support\Facades\Route;
 
 /* Rotas públicas */
@@ -24,7 +26,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('exercises', [ExerciseController::class, 'index']);
     Route::post('exercises', [ExerciseController::class, 'store']);
-    Route::delete('exercises', [ExerciseController::class, 'destroy']);
+    Route::delete('exercises/{id}', [ExerciseController::class, 'destroy']);
 
+    Route::post('workouts', [WorkoutController::class, 'store']);
+    Route::get('students/{id}/workouts', [WorkoutController::class, 'index']);
+    Route::get('students/export/{id}', [WorkoutController::class, 'export']);
 
+    Route::get('dashboard', [DashboardController::class, 'index']);
 });
