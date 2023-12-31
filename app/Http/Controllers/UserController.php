@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SendWelcomeEmail;
 use App\Models\User;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
@@ -27,6 +29,9 @@ class UserController extends Controller
             ]);
 
             $user = User::create($data);
+
+            Mail::to($user->email, $user->name)
+                ->send(new SendWelcomeEmail($user->name));
 
             return $user;
 
