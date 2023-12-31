@@ -14,13 +14,15 @@ class SendWelcomeEmail extends Mailable
     use Queueable, SerializesModels;
 
     public $name;
-    // public $plan;
+    // public $type_plan;
+    // public $limit_plan;
 
 
     public function __construct($name)
     {
         $this->name = $name;
-        // $this->plan = $plan;
+        // $this->type_plan = $type_plan;
+        // $this->limit_plan = $limit_plan;
 
     }
 
@@ -37,7 +39,7 @@ class SendWelcomeEmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            html: 'emails.welcomeEmail',
+            html: 'email.welcomeEmail',
         );
     }
 
